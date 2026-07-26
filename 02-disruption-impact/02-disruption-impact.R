@@ -130,7 +130,7 @@ ggplot(comparison, aes(x = value, y = fct_rev(label), fill = fill_color)) +
   theme_minimal() +
   theme(panel.grid.major.y = element_blank())
 
-ggsave(here("output/figures/03_gwp_impact_comparison.png"), width = 8.5, height = 5.8, dpi = 300)
+ggsave(here("output/figures/03_gwp_impact_comparison.png"), width = 8.5, height = 5.8, dpi = 300, bg = "white")
 
 cat("\nChart saved to output/figures/03_gwp_impact_comparison.png\n")
 cat("Results table saved to output/tables/disruption_impact_results.csv\n")

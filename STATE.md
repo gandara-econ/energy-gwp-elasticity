@@ -1,6 +1,61 @@
 # PROJECT STATE — World Energy Supply and Gross World Product
 
-**Last updated:** 2026-07-26
+**Last updated:** 2026-07-26 (session paused mid-task — read this section first)
+
+## ⏸ SESSION PAUSED HERE — READ BEFORE DOING ANYTHING ELSE
+
+**Committed state (in this repo, `.git` history, already pushed-ready):** single-scenario
+disruption model, elasticity 0.793, GWP impact **3.7%**, using 14.4 mb/d had NOT yet been
+integrated — the committed version still uses the older 12.8 mb/d oil-loss figure. This
+is the last *approved and committed* state.
+
+**Pending, NOT yet committed (built in `/tmp/scratch-disruption` in the sandbox, not in
+this repo):** a two-scenario version of `02-disruption-impact.R`, built and test-run
+successfully, awaiting the user's inspection/approval before being copied into this repo
+and committed. If the sandbox scratch copy is gone (it will be, sandboxes don't persist
+across sessions), **rebuild from the numbers below** rather than starting the research
+over — the research behind these numbers is solid and cited, only the file needs
+recreating.
+
+**The two pending scenarios (verified, R-executed, both correct):**
+
+| Scenario | Hormuz oil loss | + Russia net | Total oil loss | % of world oil | Energy lost | **GWP impact** |
+|---|---|---|---|---|---|---|
+| Realized | 14.4 mb/d | 0.9 mb/d | 15.3 mb/d | 14.3% | 5.17% of world primary energy | **4.1%** |
+| Severe (Bab el-Mandeb/Yanbu shutdown) | 18.0 mb/d | 0.9 mb/d | 18.9 mb/d | 17.7% | 6.23% of world primary energy | **4.9%** |
+
+**Reasoning behind the 14.4 and 18.0 figures (needed to rebuild if lost):**
+- 14.4 mb/d = IEA's April/May 2026 "Gulf output below pre-war" figure, judged the better
+  current-conditions estimate over the outdated-by-late-July "improved June" 9.4-12.8
+  range, because current (mid-late July) Hormuz vessel traffic (~15/day vs. 88/day
+  baseline, ~90% down y-o-y) has collapsed back to a severity comparable to or worse than
+  the original March closure.
+- 18.0 mb/d = 14.4 + ~3.6 mb/d from modeling a full Bab el-Mandeb closure shutting down
+  Saudi Arabia's Yanbu bypass entirely. Key fact: Yanbu's *port* (not Petroline's *pipe*)
+  is the real constraint — pipe capacity is 5-7 mb/d but Yanbu can only load ~3-4 mb/d
+  onto tankers (Aramco's own Red Sea refineries consume ~2 mb/d first). UAE's separate
+  ADCOP/Fujairah bypass (~1.1-1.8 mb/d) is unaffected by Bab el-Mandeb — it exits directly
+  into the Gulf of Oman, never touching the Red Sea. Cross-check: gross Hormuz exposure
+  (~20 mb/d) minus the only remaining bypass (ADCOP ~1.8 mb/d) ≈ 18.2 mb/d, consistent.
+- Russia net (0.9 mb/d), gas/LNG (120 bcm/yr → 3% of world gas), and elasticity (0.793)
+  are all unchanged from the committed version — see below for full sourcing.
+
+**Chart 3 was redesigned once already this session** — first draft put white descriptor
+text inside the bars (illegible against the lighter gray/tan institutional bars); fixed
+by moving that context into the y-axis labels instead. The corrected version is the one
+described above; if rebuilding, use axis-label descriptors, not in-bar text.
+
+## Immediate next steps (in order)
+1. Rebuild `02-disruption-impact.R` with the two-scenario logic above (or recover it if
+   `/tmp/scratch-disruption` still exists in a live sandbox).
+2. Get final user sign-off on the two-scenario chart.
+3. Copy into this repo's `02-disruption-impact/`, rerun both scripts, commit.
+4. Then: discuss what these numbers mean "in real terms" (user's stated next step,
+   not yet started) — and decide whether a further phase of this project is warranted.
+5. Push to GitHub (repo not yet created/pushed — see Reference section).
+
+---
+
 **Current status:** Ported from an initial Python build to R (matching the
 rest of the portfolio). Analysis complete and reproducible; not yet run
 inside RStudio locally to confirm the port executes cleanly — do that

@@ -132,7 +132,35 @@ ggplot(plot_data, aes(x = Year, y = value, color = series)) +
   theme_minimal() +
   theme(legend.position = c(0.15, 0.9))
 
-ggsave(here("output/figures/01_gwp_vs_energy_dual_axis.png"), width = 9.5, height = 6, dpi = 300)
+ggsave(here("output/figures/01_gwp_vs_energy_dual_axis.png"), width = 9.5, height = 6, dpi = 300, bg = "white")
+
+
+# =============================================================
+# CHART 1b: Growth rates over time (the missing "delta" panel --
+# matches the middle panel of Keen's own three-panel presentation:
+# levels [Chart 1] / growth-rate time series [this chart] /
+# growth-rate scatter [Chart 2]).
+# =============================================================
+delta_data <- g |>
+  select(Year, energy_growth, gwp_growth) |>
+  pivot_longer(-Year, names_to = "series", values_to = "value")
+
+ggplot(delta_data, aes(x = Year, y = value, color = series)) +
+  geom_line(linewidth = 1.1) +
+  geom_hline(yintercept = 0, linewidth = 0.3, color = "grey60") +
+  scale_color_manual(
+    values = c(energy_growth = "#d9822b", gwp_growth = "#c0392b"),
+    labels = c(energy_growth = "Energy (World)", gwp_growth = "GWP")
+  ) +
+  labs(
+    title = "Changes in GWP and World Energy Supply",
+    subtitle = "Year-over-year % change",
+    x = NULL, y = "% change per year", color = NULL
+  ) +
+  theme_minimal()
+
+ggsave(here("output/figures/01b_gwp_vs_energy_growth_over_time.png"),
+       width = 9.5, height = 5.5, dpi = 300, bg = "white")
 
 
 # =============================================================
@@ -153,7 +181,7 @@ ggplot(g, aes(x = energy_growth, y = gwp_growth)) +
   ) +
   theme_minimal()
 
-ggsave(here("output/figures/02_growth_rate_relationship.png"), width = 8, height = 6.5, dpi = 300)
+ggsave(here("output/figures/02_growth_rate_relationship.png"), width = 8, height = 6.5, dpi = 300, bg = "white")
 
 cat("\nCharts saved to output/figures/\n")
 cat(sprintf("Elasticity (%.3f) saved to data/processed/elasticity.txt for step 2.\n", slope))
