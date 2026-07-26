@@ -1,0 +1,12 @@
+# RStudio / R session files
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+# Intermediate data (script regenerates this from raw)
+data/processed/
+
+# OS / temp junk
+.DS_Store
+*.html
