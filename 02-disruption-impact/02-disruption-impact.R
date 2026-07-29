@@ -1,6 +1,6 @@
 # =============================================================
-# World Energy Supply and Gross World Product: An Elasticity Test
-# Step 2: Apply the estimated elasticity to the full 2026 disruption
+# Oil Supply Disruption and World GDP Impact
+# Step 2: Apply the energy-to-GDP conversion factor to the full 2026 disruption
 #
 # FULL ACCOUNTING (finalized 2026-07-26, after a multi-source
 # investigation -- see README for the complete sourcing narrative).
@@ -41,8 +41,8 @@
 library(tidyverse)
 library(here)
 
-# --- Load the elasticity estimated in Step 1 ---
-elasticity <- as.numeric(read_lines(here("data/processed/elasticity.txt")))
+# --- Load the conversion factor from Step 1 ---
+conversion_factor <- as.numeric(read_lines(here("data/processed/gdp_energy_factor.txt")))
 
 # --- World energy mix, 2024 (most recent complete year) ---
 # Energy Institute/EIA-via-OWID, used here only for the oil/gas/total
@@ -124,14 +124,14 @@ gas_twh_lost <- gas_twh * gas_loss_pct
 oil_twh_lost_realized   <- oil_twh * oil_loss_pct_realized
 total_twh_lost_realized <- oil_twh_lost_realized + gas_twh_lost
 pct_energy_realized     <- total_twh_lost_realized / total_twh * 100
-gwp_impact_realized     <- elasticity * pct_energy_realized
+gwp_impact_realized     <- conversion_factor * pct_energy_realized
 
 oil_twh_lost_severe   <- oil_twh * oil_loss_pct_severe
 total_twh_lost_severe <- oil_twh_lost_severe + gas_twh_lost
 pct_energy_severe     <- total_twh_lost_severe / total_twh * 100
-gwp_impact_severe     <- elasticity * pct_energy_severe
+gwp_impact_severe     <- conversion_factor * pct_energy_severe
 
-cat(sprintf("Elasticity used (from Step 1): %.3f\n\n", elasticity))
+cat(sprintf("Energy-to-GDP conversion factor used (from Step 1): %.3f\n\n", conversion_factor))
 cat("--- REALIZED scenario ---\n")
 cat(sprintf("Components (mb/d): Hormuz %.1f + Russia refining %.1f + ME refining %.1f + Reserves %.1f = %.1f\n",
             hormuz_realized_mbd, russia_refining_mbd, me_refining_mbd, reserve_depletion_mbd, total_realized_mbd))
@@ -181,7 +181,7 @@ ggplot(comparison, aes(x = value, y = fct_rev(label), fill = fill_color)) +
     subtitle = "Estimated 2026 global GDP (GWP) impact -- flow disruption, refinery crisis, and reserve depletion combined",
     x = "Estimated 2026 global GDP (GWP) impact (%)", y = NULL,
     caption = paste0(
-      "Energy-based estimates apply an output elasticity of energy (", round(elasticity, 2),
+      "Estimates apply an energy-to-GDP conversion factor (", round(conversion_factor, 2),
       ") to the full measured disruption: Hormuz/Bab el-Mandeb flow loss + Middle East and\n",
       "Russian refining capacity lost + a global reserve-depletion rate (ex-Gulf, oil-on-water excluded). See README for full component sourcing.\n",
       "Institutional comparators: IMF World Economic Outlook (Apr 2026); Oxford Economics, \"Prolonged war in Iran could tip the global economy into recession\" (Apr 2026)."
