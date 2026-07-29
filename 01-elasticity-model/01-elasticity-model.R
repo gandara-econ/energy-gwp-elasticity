@@ -17,9 +17,7 @@
 #             ("World, Primary energy supply, Total, Million toe,
 #             Annual").
 #
-# An earlier version of this analysis used the Maddison Project
-# PPP-adjusted GWP series paired with a different energy series;
-# that version is retained in data/raw/archive/ for the record.
+#
 #
 # Author: Erik Gandara
 # =============================================================
@@ -77,43 +75,7 @@ write_csv(m, here("data/processed/gwp_energy_combined.csv"))
 
 
 # =============================================================
-# CHART 1: Dual independent axes
-# =============================================================
-# Linear transform mapping energy's range onto GWP's range, so both
-# series can be drawn on one continuous y scale; sec_axis() then
-# relabels the left axis back to energy's native units.
-b_scale <- (max(m$GDP) - min(m$GDP)) / (max(m$energy) - min(m$energy))
-a_scale <- min(m$GDP) - b_scale * min(m$energy)
-
-plot_data <- m |>
-  transmute(
-    Year,
-    `GWP` = GDP,
-    `Energy (World)` = a_scale + b_scale * energy
-  ) |>
-  pivot_longer(-Year, names_to = "series", values_to = "value")
-
-ggplot(plot_data, aes(x = Year, y = value, color = series)) +
-  geom_line(linewidth = 1.1) +
-  scale_color_manual(values = c("Energy (World)" = "#d9822b", "GWP" = "#c0392b")) +
-  scale_y_continuous(
-    name = "GWP (constant 2015 US$)",
-    sec.axis = sec_axis(~ (. - a_scale) / b_scale,
-                         name = "Energy (Million tonnes oil equivalent)")
-  ) +
-  labs(
-    title = "GWP and World Energy Supply",
-    subtitle = "Each axis independently scaled to its own series",
-    x = NULL, color = NULL
-  ) +
-  theme_minimal() +
-  theme(legend.position = c(0.15, 0.9))
-
-ggsave(here("output/figures/01_gwp_vs_energy_dual_axis.png"), width = 9.5, height = 6, dpi = 300, bg = "white")
-
-
-# =============================================================
-# CHART 1b: Growth rates over time
+# CHART 1: GWP and world energy supply, year-over-year % change
 # =============================================================
 delta_data <- g |>
   select(Year, energy_growth, gwp_growth) |>
@@ -133,7 +95,7 @@ ggplot(delta_data, aes(x = Year, y = value, color = series)) +
   ) +
   theme_minimal()
 
-ggsave(here("output/figures/01b_gwp_vs_energy_growth_over_time.png"),
+ggsave(here("output/figures/01_gwp_vs_energy_growth_over_time.png"),
        width = 9.5, height = 5.5, dpi = 300, bg = "white")
 
 

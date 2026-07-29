@@ -24,11 +24,6 @@ estimate its impact on world GDP.
 - **World oil supply baseline:** EIA World Oil Transit Chokepoints report,
   1H 2025 edition (104.4 mb/d).
 
-An earlier version of this analysis used the Maddison Project
-PPP-adjusted GWP series paired with a different energy series; that
-version did not produce a materially different result and is retained in
-`data/raw/archive/` for the record.
-
 ## Finding 1: The energy-to-GDP conversion factor
 
 **Conversion factor: 0.79** (R²=0.77, 1971-2021, n=51) — meaning a 1%
@@ -36,14 +31,12 @@ change in world energy supply has historically corresponded to
 approximately a 0.79% change in world GDP.
 
 This relationship is far tighter than a simple cost-share view of energy
-would suggest, and it holds up across multiple data sources and time
-windows tested during this project (see `data/raw/archive/` for the
-earlier version tested on a different data pairing).
+would suggest.
 
-**Chart 1 note:** built with dual independent y-axes — energy on its own
-left axis, GWP on its own right axis, each auto-scaled to its own range.
-The growth-rate relationship in Chart 2 is the basis for the conversion
-factor used in this analysis.
+**Chart 1:** GWP and world energy supply, both expressed as year-over-year
+% change, on one shared axis — no index year, no rescaling, since both
+series are already in the same unit. This is the growth-rate relationship
+the conversion factor above is derived from.
 
 ## Finding 2: The 2026 disruption, fully accounted
 
@@ -99,10 +92,8 @@ severe/prolonged)**.
 
 ## Charts
 
-- `01_gwp_vs_energy_dual_axis.png` — GWP and world energy supply, dual
-  independent axes
-- `01b_gwp_vs_energy_growth_over_time.png` — year-over-year % change for
-  both series, over time
+- `01_gwp_vs_energy_growth_over_time.png` — GWP and world energy supply,
+  year-over-year % change, one shared axis
 - `02_growth_rate_relationship.png` — the growth-rate relationship behind
   the conversion factor, R²=0.77
 - `03_gwp_impact_comparison.png` — institutional forecasts vs. this
@@ -112,12 +103,12 @@ severe/prolonged)**.
 
 ## Structure
 
-- `data/raw/` — official World Bank and OECD downloads, the fuel-mix
-  source, and an earlier retired data pairing (archived)
+- `data/raw/` — official World Bank and OECD downloads, and the fuel-mix
+  source
 - `01-elasticity-model/` — derives the conversion factor
 - `02-disruption-impact/` — applies it to the full 2026 disruption
   accounting
-- `output/figures/` — all five charts
+- `output/figures/` — all four charts
 - `output/tables/` — full component results, both scenarios
 - `data/processed/` — assembled datasets (local; regenerable, gitignored)
 
