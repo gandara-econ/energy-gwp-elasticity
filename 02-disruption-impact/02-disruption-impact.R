@@ -107,8 +107,13 @@ russia_refining_mbd <- 1.4
 reserve_depletion_mbd <- 6.3
 
 # --- Totals ---
-total_realized_mbd <- hormuz_realized_mbd + russia_refining_mbd + me_refining_mbd + reserve_depletion_mbd
-total_severe_mbd   <- hormuz_severe_mbd   + russia_refining_mbd + me_refining_mbd + reserve_depletion_mbd
+total_realized_mbd <- hormuz_realized_mbd + russia_refining_mbd + me_refining_mbd
+total_severe_mbd   <- hormuz_severe_mbd   + russia_refining_mbd + me_refining_mbd
+# Note: reserve_depletion_mbd is NOT added to the total. It represents how much
+# of the Hormuz shortfall is currently being masked by drawing down stocks, not
+# an additional loss on top of it -- supply/demand accounting identity: once
+# reserves are exhausted, the shortfall reverts to the underlying production
+# loss (hormuz_realized_mbd), not production loss + reserve rate. See README.
 
 oil_loss_pct_realized <- total_realized_mbd / oil_baseline_mbd
 oil_loss_pct_severe   <- total_severe_mbd   / oil_baseline_mbd
@@ -144,16 +149,26 @@ cat(sprintf("%.1f%% of world oil -> %.2f%% of world primary energy -> GWP impact
             oil_loss_pct_severe*100, pct_energy_severe, gwp_impact_severe))
 
 # --- Save full component results table ---
+# Note: reserve_depletion_mbd is reported as a diagnostic (how much of the
+# total below is currently being masked by stock drawdowns), not summed in.
 results <- tibble(
-  scenario = c(rep("realized", 8), rep("severe", 8)),
-  metric = rep(c("hormuz_mbd", "russia_refining_mbd", "me_refining_mbd", "reserve_depletion_mbd",
-                 "total_mbd", "pct_of_world_oil", "pct_of_world_primary_energy", "implied_gwp_impact_pct"), 2),
-  value = c(hormuz_realized_mbd, russia_refining_mbd, me_refining_mbd, reserve_depletion_mbd,
+  scenario = c(rep("realized", 7), rep("severe", 7)),
+  metric = rep(c("hormuz_mbd", "russia_refining_mbd", "me_refining_mbd", "total_mbd",
+                 "pct_of_world_oil", "pct_of_world_primary_energy", "implied_gwp_impact_pct"), 2),
+  value = c(hormuz_realized_mbd, russia_refining_mbd, me_refining_mbd,
             total_realized_mbd, oil_loss_pct_realized*100, pct_energy_realized, gwp_impact_realized,
-            hormuz_severe_mbd, russia_refining_mbd, me_refining_mbd, reserve_depletion_mbd,
+            hormuz_severe_mbd, russia_refining_mbd, me_refining_mbd,
             total_severe_mbd, oil_loss_pct_severe*100, pct_energy_severe, gwp_impact_severe)
 )
 write_csv(results, here("output/tables/disruption_impact_results.csv"))
+
+# Separate diagnostic table for reserve depletion, kept apart from the summed total
+reserve_note <- tibble(
+  metric = c("reserve_depletion_mbd_diagnostic_only"),
+  value = c(reserve_depletion_mbd),
+  note = c("Currently masking this much of the Hormuz shortfall via stock drawdowns; NOT additive to total_mbd above -- see README")
+)
+write_csv(reserve_note, here("output/tables/reserve_depletion_diagnostic.csv"))
 
 
 # =============================================================
@@ -178,12 +193,13 @@ ggplot(comparison, aes(x = value, y = fct_rev(label), fill = fill_color)) +
                       expand = expansion(mult = c(0, 0.02))) +
   labs(
     title = "Institutional Forecasts vs. a Full-Accounting Energy-Based Model",
-    subtitle = "Estimated 2026 global GDP (GWP) impact -- flow disruption, refinery crisis, and reserve depletion combined",
+    subtitle = "Estimated 2026 global GDP (GWP) impact -- flow disruption and refinery crisis combined",
     x = "Estimated 2026 global GDP (GWP) impact (%)", y = NULL,
     caption = paste0(
       "Estimates apply an energy-to-GDP conversion factor (", round(conversion_factor, 2),
-      ") to the full measured disruption: Hormuz/Bab el-Mandeb flow loss + Middle East and\n",
-      "Russian refining capacity lost + a global reserve-depletion rate (ex-Gulf, oil-on-water excluded). See README for full component sourcing.\n",
+      ") to the measured disruption: Hormuz/Bab el-Mandeb flow loss + Middle East and Russian\n",
+      "refining capacity lost. Reserve depletion is tracked separately as a diagnostic (how much of this total is currently\n",
+      "masked by stock drawdowns), not summed into the total -- see README.\n",
       "Institutional comparators: IMF World Economic Outlook (Apr 2026); Oxford Economics, \"Prolonged war in Iran could tip the global economy into recession\" (Apr 2026)."
     )
   ) +
@@ -203,19 +219,21 @@ ggsave(here("output/figures/03_gwp_impact_comparison.png"), width = 10.5, height
 
 
 # =============================================================
-# CHART 4 (new): Component build-up -- what's driving the total
+# CHART 4: Component build-up -- what's driving the total
+# Reserve depletion shown as a separate reference line, NOT stacked into
+# the bar, since it is a diagnostic of how much of the total is currently
+# masked, not an additional loss (see accounting note above).
 # =============================================================
 buildup <- tibble(
-  scenario = rep(c("Realized", "Severe\n(Bab el-Mandeb/Yanbu)"), each = 4),
-  component = rep(c("Reserve depletion\n(\"borrowed time\")", "Middle East refining offline",
-                     "Russia refining (gross)", "Hormuz/Gulf flow disruption"), 2),
-  value = c(reserve_depletion_mbd, me_refining_mbd, russia_refining_mbd, hormuz_realized_mbd,
-            reserve_depletion_mbd, me_refining_mbd, russia_refining_mbd, hormuz_severe_mbd)
+  scenario = rep(c("Realized", "Severe\n(Bab el-Mandeb/Yanbu)"), each = 3),
+  component = rep(c("Middle East refining offline", "Russia refining (gross)", "Hormuz/Gulf flow disruption"), 2),
+  value = c(me_refining_mbd, russia_refining_mbd, hormuz_realized_mbd,
+            me_refining_mbd, russia_refining_mbd, hormuz_severe_mbd)
 ) |>
   mutate(
     scenario = fct_inorder(scenario),
     component = fct_relevel(component, "Hormuz/Gulf flow disruption", "Russia refining (gross)",
-                             "Middle East refining offline", "Reserve depletion\n(\"borrowed time\")")
+                             "Middle East refining offline")
   )
 
 totals <- buildup |> group_by(scenario) |> summarise(total = sum(value))
@@ -223,8 +241,7 @@ totals <- buildup |> group_by(scenario) |> summarise(total = sum(value))
 component_colors <- c(
   "Hormuz/Gulf flow disruption" = "#1f3a5f",
   "Russia refining (gross)" = "#3d5a80",
-  "Middle East refining offline" = "#a8611f",
-  "Reserve depletion\n(\"borrowed time\")" = "#c0392b"
+  "Middle East refining offline" = "#a8611f"
 )
 
 ggplot(buildup, aes(x = scenario, y = value, fill = component)) +
@@ -237,10 +254,12 @@ ggplot(buildup, aes(x = scenario, y = value, fill = component)) +
   scale_y_continuous(limits = c(0, max(totals$total) * 1.15),
                       expand = expansion(mult = c(0, 0.02))) +
   labs(
-    title = "What's Driving the Disruption: Four Components, Not One",
+    title = "What's Driving the Disruption: Three Summed Components",
     subtitle = "Million barrels/day (oil-equivalent), by contributing factor",
     x = NULL, y = "Million barrels per day (oil-equivalent)", fill = NULL,
-    caption = "Reserve depletion represents borrowed time, not a permanent loss -- it's the rate at which stocks are\nbeing spent to mask the shortfall, which converts into unmasked shortfall once reserves run out."
+    caption = sprintf(
+      "Reserve depletion (%.1f mb/d) is tracked separately, not shown here -- it represents how much of\nthe total above is currently masked by stock drawdowns, not an additional loss on top of it. See README.",
+      reserve_depletion_mbd)
   ) +
   theme_minimal(base_size = 12) +
   theme(

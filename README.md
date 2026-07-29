@@ -41,24 +41,24 @@ the conversion factor above is derived from.
 ## Finding 2: The 2026 disruption, fully accounted
 
 The disruption is treated as three simultaneous, non-overlapping crises,
-plus a fourth "borrowed time" factor:
+plus a reserve-depletion figure tracked separately as a diagnostic:
 
 | Component | Realized | Severe (Bab el-Mandeb/Yanbu shutdown) | Basis |
 |---|---|---|---|
 | Hormuz/Gulf flow disruption | 14.4 mb/d | 18.0 mb/d | IEA Oil Market Reports; current vessel-traffic collapse (~15/day vs. 88/day baseline) shows severity back at or beyond the original March peak |
 | Russia refining (gross) | 1.4 mb/d | 1.4 mb/d | Energy Aspects/Bloomberg refining-throughput data, independently corroborated by Reuters' ~25% y-o-y fuel-output decline |
 | Middle East refining capacity offline | 3.0 mb/d | 3.0 mb/d | IEA: "~3 mb/d of refining capacity in the region has already shut due to attacks and a lack of viable export outlets" |
-| Reserve depletion rate | 6.3 mb/d | 6.3 mb/d | Cross-validated: EIA's own Short-Term Energy Outlook (6.3 mb/d, 2Q26 actual) and Energy Intelligence/Turner Mason (~6.5 mb/d) |
-| **Total** | **25.1 mb/d** | **28.7 mb/d** | |
-| % of world oil | 24.0% | 27.5% | |
-| % of world primary energy | 8.22% | 9.30% | |
-| **Implied GWP impact** | **6.52%** | **7.38%** | |
+| **Total** | **18.8 mb/d** | **22.4 mb/d** | |
+| % of world oil | 18.0% | 21.5% | |
+| % of world primary energy | 6.33% | 7.41% | |
+| **Implied GWP impact** | **5.02%** | **5.88%** | |
+| *Reserve depletion rate (diagnostic, not summed above)* | *6.3 mb/d* | *6.3 mb/d* | *Cross-validated: EIA's own Short-Term Energy Outlook (6.3 mb/d, 2Q26 actual) and Energy Intelligence/Turner Mason (~6.5 mb/d). This is how much of the Hormuz shortfall above is currently being masked by stock drawdowns — a standard supply/demand accounting identity means it is not an additional loss on top of the total; once reserves are exhausted the shortfall reverts to the Hormuz figure itself, not Hormuz + this rate.* |
 
 For comparison, the mainstream institutional range for this same event is
 **0.6% (IMF/Oxford Economics moderate) to 1.2% (Oxford Economics
 severe/prolonged)**.
 
-### Why four components, not one
+### Why three summed components, plus one tracked separately
 
 - **Hormuz/Bab el-Mandeb** is upstream crude extraction — wells shut in
   because there's nowhere to ship the oil. The severe scenario adds the
@@ -76,15 +76,19 @@ severe/prolonged)**.
   pass. Asian refiners' feedstock-constrained run cuts were deliberately
   **excluded** — that's a downstream symptom of the Hormuz crude shortage
   already counted above.
-- **Reserve depletion** is "borrowed time," not a permanent loss: the rate
+- **Reserve depletion** is "borrowed time," not a permanent loss, and is
+  **tracked separately, not summed into the total above.** It's the rate
   at which the world (excluding Gulf holdings, which were never reaching
   the market anyway) has been spending down commercial and strategic oil
-  stocks to mask the true scale of the shortfall. Once reserves are
-  exhausted, this rate converts into real, unmasked shortfall on top of
-  everything else. China's reserve behavior (it was net-building reserves
-  for most of this period, only drawing modestly from May onward) is
-  excluded from this rate's calculation, on the reasoning that oil sitting
-  in reserves — built or drawn — is oil off the market either way.
+  stocks to mask part of the Hormuz shortfall already counted above. By a
+  standard supply/demand accounting identity, once reserves are exhausted
+  the shortfall reverts to the underlying production loss (the Hormuz
+  figure), not the Hormuz figure plus the reserve rate — adding them would
+  double-count the same barrels. China's reserve behavior (it was
+  net-building reserves for most of this period, only drawing modestly
+  from May onward) is excluded from this rate's calculation, on the
+  reasoning that oil sitting in reserves — built or drawn — is oil off the
+  market either way.
 - **Oil-on-water was deliberately excluded**, despite initially appearing
   to be a similar "borrowed time" factor. It reversed direction mid-crisis
   and the available data has real gaps, failing the reliability bar

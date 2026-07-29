@@ -12,9 +12,9 @@ real terms") is the next deliverable, not yet drafted.
 - R scripts complete and verified (both run cleanly, numbers match
   hand-calculations exactly).
 - Energy-to-GDP conversion factor: **0.79** (R²=0.77, 1971-2021).
-- Full disruption accounting finalized: realized = 25.1 mb/d (6.52%
-  implied GDP impact), severe/Bab el-Mandeb-Yanbu-shutdown = 28.7 mb/d
-  (7.38% implied GDP impact). See README for the full component
+- Full disruption accounting finalized: realized = 18.8 mb/d (5.02%
+  implied GDP impact), severe/Bab el-Mandeb-Yanbu-shutdown = 22.4 mb/d
+  (5.88% implied GDP impact). See README for the full component
   breakdown and sourcing.
 - Five charts total, all built and contrast-checked.
 - README rewritten to document the full methodology, sourcing, and
